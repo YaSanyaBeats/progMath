@@ -23,6 +23,7 @@ def main():
     for i in range(columns):
         window.columnconfigure(i, weight=1, minsize=75)
 
+
         for j in range(rows):
             window.rowconfigure(j, weight=1, minsize=50)
             frame = tk.Frame(master=window)
