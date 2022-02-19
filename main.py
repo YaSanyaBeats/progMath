@@ -2,8 +2,15 @@ import tkinter as tk
 from errors import errorCodes, error
 from lab1 import startLab1
 from lab2 import startLab2
+from playsound import playsound
+import threading
+
+def playStartSound():
+    playsound('trigger.mpeg')
 
 def main():
+    x = threading.Thread(target=playStartSound)
+    x.start()
     window = tk.Tk()
     window.title("Выч мат от гения")
     columns = 4
