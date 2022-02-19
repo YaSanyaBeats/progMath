@@ -1,6 +1,7 @@
 import tkinter as tk
 from errors import errorCodes, error
 from lab1 import startLab1
+from lab2 import startLab2
 
 def main():
     window = tk.Tk()
@@ -8,7 +9,7 @@ def main():
     columns = 4
     rows = 3
     buttonCommands = [startLab1,
-                      lambda er=errorCodes.LAB_NOT_FINED: error(er),
+                      startLab2,
                       lambda er=errorCodes.LAB_NOT_FINED: error(er),
                       lambda er=errorCodes.LAB_NOT_FINED: error(er),
                       lambda er=errorCodes.LAB_NOT_FINED: error(er),

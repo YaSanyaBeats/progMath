@@ -1,17 +1,18 @@
-import tkinter as tk
-from tkinter import filedialog, Menu, Frame, END
+from tkinter import *
+from tkinter import filedialog
 import string
 from errors import errorCodes, error
 
-class firstLab():
+class secondLab():
 
     def __init__(self, window):
         super().__init__()
+        self.method = "МПИ"
         self.window = window    # родительское окно в методе
         self.initUI()
 
     def initUI(self):
-        self.window.title("Гаусс #1")
+        self.window.title("МПИ и Зейдель #2")
 
         mainMenu = Menu(self.window, tearoff=0)    # создаём вкладку в меню
         self.window.config(menu=mainMenu)
@@ -19,43 +20,34 @@ class firstLab():
         fileMenu.add_command(label="Открыть", command=self.onOpen)
         mainMenu.add_cascade(label="Файл", menu=fileMenu)
 
-        buttonsFrame = tk.Frame(master=self.window)
-        buttonsFrame.pack(fill=tk.BOTH)
-        buttonsFrame.columnconfigure([0, 1], weight=1, minsize=50)
-        buttonsFrame.columnconfigure(2, weight=2, minsize=50)
-        buttonsFrame.columnconfigure(3, weight=2, minsize=50)
+        buttonsFrame = Frame(master=self.window)
+        buttonsFrame.pack(fill=BOTH)
+        buttonsFrame.columnconfigure([0, 1, 4, 5], weight=1, minsize=50)
+        buttonsFrame.columnconfigure([2, 3], weight=2, minsize=50)
         buttonsFrame.rowconfigure(0, weight=1, minsize=50)
-        self.plusButton = tk.Button(text="+", master=buttonsFrame, width=5, command=self.expandMatrix)
+        self.plusButton = Button(text="+", master=buttonsFrame, width=5, command=self.expandMatrix)
         self.plusButton.grid(row=0, column=0)
-        self.minusButton = tk.Button(text="-", master=buttonsFrame, width=5, command=self.decreaseMatrix)
+        self.minusButton = Button(text="-", master=buttonsFrame, width=5, command=self.decreaseMatrix)
         self.minusButton.grid(row=0, column=1)
-        self.clearButton = tk.Button(text="Очистить", master=buttonsFrame, width=10, command=self.clearMatrix)
+        self.clearButton = Button(text="Очистить", master=buttonsFrame, width=10, command=self.clearMatrix)
         self.clearButton.grid(row=0, column=2)
-        self.startButton = tk.Button(text="Рассчитать", master=buttonsFrame, width=10, command=self.calculateGaus)
+
+
+        r1 = Radiobutton(buttonsFrame, text="МПИ", variable=self.method, value=0, command=self.setFirstMethod)
+        r2 = Radiobutton(buttonsFrame, text="Зейдель", variable=self.method, value=1, command=self.setSecondMethod)
+        r1.select()
+        r1.grid(row=0, column=4)
+        r2.grid(row=0, column=5)
+
+        self.startButton = Button(text="Рассчитать", master=buttonsFrame, width=10, command=self.calculate)
         self.startButton.grid(row=0, column=3)
 
         self.matrixLength = 3
         self.inputs = []
         self.drawMatrix()
 
-    def sortMatrix(self, matrix):
-        # сортировка строк по убыванию (пузырёк)
-        rowMaxElem = 0
-        for i in range(self.matrixLength):
-            for j in range(i + 1, self.matrixLength):
-                # сравнение строк матрицы
-                column = 0
-                while (matrix[i][column] == matrix[j][column]):
-                    column += 1
-                    if (column == self.matrixLength + 1):
-                        error(errorCodes.IDENTIAL_LINES)
-                        return
-                if (abs(matrix[i][column]) < abs(matrix[j][column])):  # по убыванию
-                    matrix[i], matrix[j] = matrix[j], matrix[i]
-
-    def calculateGaus(self):
+    def calculate(self):
         self.destroyResults()
-
         matrix = self.getMatrix()
         if (not self.checkEmptyMatrixElems(matrix)):
             error(errorCodes.EMPTY_MATRIX_ELEM)
@@ -80,51 +72,46 @@ class firstLab():
 
         print("Матрица на входе:")
         self.printMatrix(matrix)
-        self.sortMatrix(matrix)
 
-        print("После свапа:")
-        self.printMatrix(matrix)
+        for i in range(self.matrixLength):
+            for j in range(self.matrixLength + 1):
+                matrix[i][j] = float(matrix[i][j])
 
-        # зануляем всё что ниже диагонали
-        for step in range(self.matrixLength - 1):
-            for row in range(step + 1, self.matrixLength):
-                if(matrix[step][step] == 0):
-                    continue
-                coefficient = matrix[row][step] / -matrix[step][step]
-                for column in range(self.matrixLength + 1):
-                    matrix[row][column] += round(coefficient * matrix[step][column], 10)
-            print("Зануление, шаг: ", step)
-            self.printMatrix(matrix)
-            self.sortMatrix(matrix)
+        results = [0] * self.matrixLength
+        lastResults = [0] * self.matrixLength
+        for iteration in range(5):
+            for i in range(self.matrixLength):
+                result = matrix[i][self.matrixLength]
+                for j in range(self.matrixLength):
+                    if(j == i):
+                        continue
+                    if(self.method == "МПИ"):
+                        result -= matrix[i][j] * lastResults[j]
+                    if(self.method == "Зейдель"):
+                        result -= matrix[i][j] * results[j]
+                result /= matrix[i][i]
+                results[i] = result
+            for i in range(len(results)):
+                lastResults[i] = results[i]
+            print("Шаг: ", iteration, ". ", lastResults);
 
-        print("После зануления: ")
-        self.printMatrix(matrix)
-
-        # находим неизвестные
-        step = 0
-        results = []
-        for row in range(self.matrixLength - 1, -1, -1):
-            count = 0
-            for column in range(self.matrixLength - 1, self.matrixLength - step - 1, -1):
-                matrix[row][self.matrixLength] -= matrix[row][column] * results[count]
-                count += 1
-            results.append(matrix[row][self.matrixLength] / matrix[row][self.matrixLength - step - 1])
-            step += 1
-
-        results.reverse()
-
-        resultsStr = ""
+        resultsStr = self.method + "\n"
         for i in range(len(results)):
             resultsStr += string.ascii_lowercase[i] + " = " + str(round(results[i], 5))
             resultsStr += "\n"
 
-        self.resultsFrame = tk.Frame(master=self.window)
-
+        self.resultsFrame = Frame(master=self.window)
 
         self.resultsFrame.pack()
         self.resultsFrame.columnconfigure(0, minsize=100)
-        resultsLabel = tk.Label(text=resultsStr, master=self.resultsFrame, font=("Courier", 20))
+        resultsLabel = Label(text=resultsStr, master=self.resultsFrame, font=("Courier", 20))
         resultsLabel.grid(row=0, column=0, pady=20, sticky="w")
+
+    def setFirstMethod(self):
+        self.method = "МПИ"
+
+    def setSecondMethod(self):
+        self.method = "Зейдель"
 
     def isNumber(self, x):
         try:
@@ -172,15 +159,17 @@ class firstLab():
     def clearMatrix(self):
         self.destroyResults()
         for input in self.inputs:
-            input.delete(0, tk.END)
+            input.delete(0, END)
 
     def expandMatrix(self):
+        self.destroyResults()
         self.destroyMatrix()
         if(self.matrixLength < 9):
             self.matrixLength += 1
         self.drawMatrix()
 
     def decreaseMatrix(self):
+        self.destroyResults()
         self.destroyMatrix()
         if (self.matrixLength > 2):
             self.matrixLength -= 1
@@ -188,16 +177,16 @@ class firstLab():
 
     # рисуем матрицу определённого размера
     def drawMatrix(self):
-        self.matrixFrame = tk.Frame(master=self.window)
+        self.matrixFrame = Frame(master=self.window)
         for i in range(self.matrixLength):
 
             self.matrixFrame.rowconfigure(i, weight=1, minsize=20)
             for j in range(self.matrixLength + 1):
                 self.matrixFrame.columnconfigure(j, weight=1, minsize=20)
-                input = tk.Entry(master=self.matrixFrame, width=5)
+                input = Entry(master=self.matrixFrame, width=5)
                 self.inputs.append(input)
                 input.grid(row=i, column=j, padx=10, pady=5)
-        self.matrixFrame.pack(fill=tk.BOTH)
+        self.matrixFrame.pack(fill=BOTH)
 
     def destroyMatrix(self):
         self.matrixFrame.destroy()
@@ -261,7 +250,7 @@ class firstLab():
         for i in range (matrixLength):
             for j in range(matrixLength + 1):
                 number = (matrixLength + 1) * i + (j + 1)
-                self.inputs[number - 1].delete(0, tk.END)
+                self.inputs[number - 1].delete(0, END)
                 self.inputs[number - 1].insert(0, matrix[i][j])
 
         # печатаем матрицу
@@ -277,7 +266,7 @@ class firstLab():
             print(matrix[i])
 
 
-def startLab1():
-    window = tk.Tk()
-    app = firstLab(window)
+def startLab2():
+    window = Tk()
+    app = secondLab(window)
     window.mainloop()
