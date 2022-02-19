@@ -92,7 +92,7 @@ class firstLab():
                     continue
                 coefficient = matrix[row][step] / -matrix[step][step]
                 for column in range(self.matrixLength + 1):
-                    matrix[row][column] += coefficient * matrix[step][column]
+                    matrix[row][column] += round(coefficient * matrix[step][column], 10)
             print("Зануление, шаг: ", step)
             self.printMatrix(matrix)
             self.sortMatrix(matrix)
@@ -125,7 +125,7 @@ class firstLab():
         self.resultsFrame.columnconfigure(0, minsize=50)
         self.resultsFrame.columnconfigure(0, minsize=100)
         resultsLabel = tk.Label(text=resultsStr, master=self.resultsFrame, font=("Courier", 20))
-        resultsLabel.grid(row=0, column=0, pady=20)
+        resultsLabel.grid(row=0, column=0, pady=20, sticky="w")
 
     def isNumber(self, x):
         try:
