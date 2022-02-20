@@ -79,7 +79,11 @@ class secondLab():
 
         results = [0] * self.matrixLength
         lastResults = [0] * self.matrixLength
-        for iteration in range(5):
+        e = 0.001
+        isLoop = True;
+        iteration = 1
+        while(isLoop):
+            isLoop = False
             for i in range(self.matrixLength):
                 result = matrix[i][self.matrixLength]
                 for j in range(self.matrixLength):
@@ -92,14 +96,21 @@ class secondLab():
                 result /= matrix[i][i]
                 results[i] = result
             for i in range(len(results)):
+                if(e < abs(results[i] - lastResults[i])):
+                    isLoop = True
                 lastResults[i] = results[i]
             print("Шаг: ", iteration, ". ", lastResults);
+            iteration += 1
+
+        #for i in range(self.matrixLength):
+        #    for j in range(self.matrixLength + 1):
+        #        matrix[i][j] /= matrix[i][i]
 
         resultsStr = self.method + "\n"
         for i in range(len(results)):
             resultsStr += string.ascii_lowercase[i] + " = " + str(round(results[i], 5))
             resultsStr += "\n"
-
+        resultsStr += "Погрешность: " + str(e) + "\n Кол-во итераций: " + str(iteration)
         self.resultsFrame = Frame(master=self.window)
 
         self.resultsFrame.pack()
