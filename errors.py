@@ -9,6 +9,7 @@ class errorCodes:
     IDENTIAL_LINES = 6
     ZERO_ROW = 7
     ZERO_COLUMN = 8
+    NOT_HAVE_SOLUTION = 9
 
 def error(errorCode):
     match errorCode:
@@ -28,3 +29,5 @@ def error(errorCode):
             mbox.showerror("Ошибка", "Матрица содержит нулевую строку, однозначный ответ невозможен")
         case errorCodes.ZERO_COLUMN:
             mbox.showerror("Ошибка", "Матрица содержит нулевую колонку, однозначный ответ невозможен")
+        case errorCodes.NOT_HAVE_SOLUTION:
+            mbox.showerror("Ошибка", "Ответа не существует")

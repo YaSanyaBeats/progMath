@@ -15,6 +15,7 @@ def main():
     window = tk.Tk()
     window.title("Выч мат от гения")
     columns = 4
+
     rows = 3
     buttonCommands = [startLab1,
                       startLab2,
