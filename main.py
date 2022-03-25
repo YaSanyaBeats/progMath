@@ -3,6 +3,7 @@ from errors import errorCodes, error
 from lab1 import startLab1
 from lab2 import startLab2
 from lab3 import startLab3
+from lab5 import startLab5
 from playsound import playsound
 import threading
 
@@ -21,7 +22,7 @@ def main():
                       startLab2,
                       startLab3,
                       lambda er=errorCodes.LAB_NOT_FINED: error(er),
-                      lambda er=errorCodes.LAB_NOT_FINED: error(er),
+                      startLab5,
                       lambda er=errorCodes.LAB_NOT_FINED: error(er),
                       lambda er=errorCodes.LAB_NOT_FINED: error(er),
                       lambda er=errorCodes.LAB_NOT_FINED: error(er),
@@ -38,7 +39,7 @@ def main():
             window.rowconfigure(j, weight=1, minsize=50)
             frame = tk.Frame(master=window)
             frame.grid(row=j, column=i, padx=30, pady=30)
-            number = rows * j + (i + 1)
+            number = i + j * columns + 1
             button = tk.Button(
                 master=frame,
                 text="Лабораторная №" + str(number),

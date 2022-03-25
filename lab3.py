@@ -169,7 +169,7 @@ class thirdLab():
             error(errorCodes.FILE_NOT_FOUND)
             return
 
-        self.coefficients = text.split(" ");
+        self.coefficients = text.split(" ")
 
 def startLab3():
     window = Tk()
