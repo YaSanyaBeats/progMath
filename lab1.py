@@ -50,18 +50,18 @@ class firstLab():
                     if (column == self.matrixLength + 1):
                         error(errorCodes.IDENTIAL_LINES)
                         return
-                if (abs(matrix[i][column]) < abs(matrix[j][column])):  # по убыванию
+                if abs(matrix[i][column]) < abs(matrix[j][column]):  # по убыванию
                     matrix[i], matrix[j] = matrix[j], matrix[i]
 
     def calculateGaus(self):
         self.destroyResults()
 
         matrix = self.getMatrix()
-        if (not self.checkEmptyMatrixElems(matrix)):
+        if not self.checkEmptyMatrixElems(matrix):
             error(errorCodes.EMPTY_MATRIX_ELEM)
             return
 
-        if (not self.checkNotDigitMatrixElems(matrix)):
+        if not self.checkNotDigitMatrixElems(matrix):
             error(errorCodes.MATRIX_ELEM_IS_NOT_DIGIT)
             return
 

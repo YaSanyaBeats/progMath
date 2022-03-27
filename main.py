@@ -3,6 +3,7 @@ from errors import errorCodes, error
 from lab1 import startLab1
 from lab2 import startLab2
 from lab3 import startLab3
+from lab4 import startLab4
 from lab5 import startLab5
 from playsound import playsound
 import threading
@@ -21,7 +22,7 @@ def main():
     buttonCommands = [startLab1,
                       startLab2,
                       startLab3,
-                      lambda er=errorCodes.LAB_NOT_FINED: error(er),
+                      startLab4,
                       startLab5,
                       lambda er=errorCodes.LAB_NOT_FINED: error(er),
                       lambda er=errorCodes.LAB_NOT_FINED: error(er),
