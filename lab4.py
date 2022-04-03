@@ -12,7 +12,9 @@ class fourthLab():
         self.method = "Лагранж"
         self.coefficients = []
         self.inputs = []
+        self.method = 1
         self.initUI()
+        self.matrix_length = 3
 
     def initUI(self):
         self.window.title("СЛУ методом Ньютона")
@@ -28,7 +30,11 @@ class fourthLab():
         self.clear_button.pack(side=LEFT)
         self.start_button = Button(text="Рассчитать", master=buttons_frame, width=10, command=self.calculate)
         self.start_button.pack(side=LEFT)
-
+        r1 = Radiobutton(buttons_frame, text="Обратная", variable=self.method, value=0, command=self.set_first_method)
+        r1.pack(side=LEFT)
+        Radiobutton(buttons_frame, text="Гаусс", variable=self.method, value=1, command=self.set_second_method).pack(
+            side=LEFT)
+        r1.select()
         buttons_frame.pack(side=TOP)
 
         matrix_frame = Frame(master=self.window, pady=10, padx=10)
@@ -72,6 +78,12 @@ class fourthLab():
         self.result_label = Label(master=result_frame, font="Courier 16", pady=10)
         self.result_label.pack(side=TOP)
 
+    def set_first_method(self):
+        self.method = 1
+
+    def set_second_method(self):
+        self.method = 2
+
     def get_coef(self):
         coefs = []
         for input in self.inputs:
@@ -104,6 +116,64 @@ class fourthLab():
                 result.append(self.W[i][j]['coef'] * (start[j][0] ** self.W[i][j]['degree']))
         return result
 
+    def print_matrix(self, matrix):
+        for i in range(self.matrix_length):
+            print(matrix[i])
+
+    def sortMatrix(self, matrix):
+        # сортировка строк по убыванию (пузырёк)
+        rowMaxElem = 0
+        for i in range(self.matrix_length):
+            for j in range(i + 1, self.matrix_length):
+                # сравнение строк матрицы
+                column = 0
+                while matrix[i][column] == matrix[j][column]:
+                    column += 1
+                    if column == self.matrix_length + 1:
+                        error(errorCodes.IDENTIAL_LINES)
+                        return
+                if abs(matrix[i][column]) < abs(matrix[j][column]):  # по убыванию
+                    matrix[i], matrix[j] = matrix[j], matrix[i]
+
+    def calculate_gaus(self, matrix):
+
+        print("Матрица на входе:")
+        self.print_matrix(matrix)
+        self.sortMatrix(matrix)
+
+        print("После свапа:")
+        self.print_matrix(matrix)
+
+        # зануляем всё что ниже диагонали
+        for step in range(self.matrix_length - 1):
+            for row in range(step + 1, self.matrix_length):
+                if(matrix[step][step] == 0):
+                    continue
+                coefficient = matrix[row][step] / -matrix[step][step]
+                for column in range(self.matrix_length + 1):
+                    matrix[row][column] += round(coefficient * matrix[step][column], 10)
+            print("Зануление, шаг: ", step)
+            self.print_matrix(matrix)
+            self.sortMatrix(matrix)
+
+        print("После зануления: ")
+        self.print_matrix(matrix)
+
+        # находим неизвестные
+        step = 0
+        results = []
+        for row in range(self.matrix_length - 1, -1, -1):
+            count = 0
+            for column in range(self.matrix_length - 1, self.matrix_length - step - 1, -1):
+                matrix[row][self.matrix_length] -= matrix[row][column] * results[count]
+                count += 1
+            results.append(matrix[row][self.matrix_length] / matrix[row][self.matrix_length - step - 1])
+            step += 1
+
+        results.reverse()
+
+        return np.array([[results[0]], [results[1]], [results[2]]])
+
     def calculate(self):
         self.coefficients = self.get_coef()
         inaccuracy = self.coefficients[24]
@@ -127,8 +197,22 @@ class fourthLab():
 
             invertW = np.linalg.inv(A)
             FX = np.array([[currF[0]], [currF[1]], [currF[2]]])
+            matrix = []
+            if self.method == 1:
+                X = X - invertW.dot(FX)
+            elif self.method == 2:
 
-            X = X - invertW.dot(FX)
+                for i in range(self.matrix_length):
+                    matrix.append([0] * (self.matrix_length + 1))
+
+                for i in range(self.matrix_length):
+                    for j in range(self.matrix_length):
+                        matrix[i][j] = A[i][j]
+                    matrix[i][self.matrix_length] = FX[i][0]
+                gaus = self.calculate_gaus(matrix)
+
+                X = X - gaus
+
         self.print_result(X)
 
 
