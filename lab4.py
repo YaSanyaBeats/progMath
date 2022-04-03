@@ -218,7 +218,7 @@ class fourthLab():
 
     def clear(self):
         for input in self.inputs:
-            input.insert(0, 1)
+            input.delete(0, END)
         self.result_label.config(text="")
 
     def on_open(self):

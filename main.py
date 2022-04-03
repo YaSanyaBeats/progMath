@@ -6,6 +6,7 @@ from lab3 import startLab3
 from lab4 import startLab4
 from lab5 import startLab5
 from lab6 import startLab6
+from lab7 import startLab7
 from playsound import playsound
 import threading
 
@@ -26,7 +27,7 @@ def main():
                       startLab4,
                       startLab5,
                       startLab6,
-                      lambda er=errorCodes.LAB_NOT_FINED: error(er),
+                      startLab7,
                       lambda er=errorCodes.LAB_NOT_FINED: error(er),
                       lambda er=errorCodes.LAB_NOT_FINED: error(er),
                       lambda er=errorCodes.LAB_NOT_FINED: error(er),
