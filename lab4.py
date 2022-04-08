@@ -30,9 +30,9 @@ class fourthLab():
         self.clear_button.pack(side=LEFT)
         self.start_button = Button(text="Рассчитать", master=buttons_frame, width=10, command=self.calculate)
         self.start_button.pack(side=LEFT)
-        r1 = Radiobutton(buttons_frame, text="Обратная", variable=self.method, value=0, command=self.set_first_method)
+        r1 = Radiobutton(buttons_frame, text="Гаусс", variable=self.method, value=0, command=self.set_first_method)
         r1.pack(side=LEFT)
-        Radiobutton(buttons_frame, text="Гаусс", variable=self.method, value=1, command=self.set_second_method).pack(
+        Radiobutton(buttons_frame, text="Обратная", variable=self.method, value=1, command=self.set_second_method).pack(
             side=LEFT)
         r1.select()
         buttons_frame.pack(side=TOP)

@@ -4,6 +4,7 @@ import string
 from errors import errorCodes, error
 import math
 import numpy as np
+import matplotlib.pyplot as plt
 
 class seventhLab():
     def __init__(self, window):
@@ -85,6 +86,14 @@ class seventhLab():
     def print_result(self, result):
         self.result_label.config(text="y = " + result)
 
+        window = plt.subplots()
+        x = np.arange(self.X[0], self.X[-1], 0.1)
+        y = []
+        for i in range(len(x)):
+            y.append(self.calculate_digit(x[i]))
+        plt.plot(x, y)
+        plt.show()
+
     def sortMatrix(self, matrix):
         # сортировка строк по убыванию (пузырёк)
         rowMaxElem = 0
@@ -140,7 +149,10 @@ class seventhLab():
 
     def calculate(self):
         self.coefficients = self.get_coef()
+        result = self.calculate_digit(self.coefficients[10])
+        self.print_result(str(result))
 
+    def calculate_digit(self, x):
         self.X = np.array(self.coefficients[0:5])
         self.Y = np.array(self.coefficients[5:10])
 
@@ -166,7 +178,6 @@ class seventhLab():
         M = np.vstack((0, M, 0))
 
         i = 0
-        x = self.coefficients[10]
         while x > self.X[i]:
             i += 1
 
@@ -176,7 +187,7 @@ class seventhLab():
         result += (self.Y[i - 1] - M[i - 1][0] * self.get_step_x2(i) ** 2 / 6) * (self.X[i] - x) / self.get_step_x2(i)
         result += (self.Y[i] - M[i][0] * self.get_step_x2(i) ** 2 / 6) * (x - self.X[i - 1]) / self.get_step_x2(i)
 
-        self.print_result(str(result))
+        return result
 
     def clear(self):
         for input in self.inputs:
