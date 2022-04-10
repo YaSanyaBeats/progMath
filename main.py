@@ -7,9 +7,10 @@ from lab4 import startLab4
 from lab5 import startLab5
 from lab6 import startLab6
 from lab7 import startLab7
+from lab8 import startLab8
 from playsound import playsound
 import threading
-
+import math
 def playStartSound():
     playsound('trigger.mpeg')
 
@@ -28,7 +29,7 @@ def main():
                       startLab5,
                       startLab6,
                       startLab7,
-                      lambda er=errorCodes.LAB_NOT_FINED: error(er),
+                      startLab8,
                       lambda er=errorCodes.LAB_NOT_FINED: error(er),
                       lambda er=errorCodes.LAB_NOT_FINED: error(er),
                       lambda er=errorCodes.LAB_NOT_FINED: error(er),
