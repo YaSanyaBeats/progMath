@@ -27,7 +27,7 @@ class tenLab():
         self.matrix_length = 3
 
     def initUI(self):
-        self.window.title("Аппроксимация #7")
+        self.window.title("Аппроксимация #11")
 
         mainMenu = Menu(self.window, tearoff=0)  # создаём вкладку в меню
         self.window.config(menu=mainMenu)

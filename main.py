@@ -11,6 +11,7 @@ from lab8 import startLab8
 from lab9 import startLab9
 from lab10 import startLab10
 from lab11 import startLab11
+from lab12 import startLab12
 from playsound import playsound
 import threading
 import math
@@ -36,7 +37,7 @@ def main():
                       startLab9,
                       startLab10,
                       startLab11,
-                      lambda er=errorCodes.LAB_NOT_FINED: error(er)]
+                      startLab12]
 
     for i in range(columns):
         window.columnconfigure(i, weight=1, minsize=75)
