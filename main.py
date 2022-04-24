@@ -8,6 +8,8 @@ from lab5 import startLab5
 from lab6 import startLab6
 from lab7 import startLab7
 from lab8 import startLab8
+from lab9 import startLab9
+from lab10 import startLab10
 from playsound import playsound
 import threading
 import math
@@ -30,8 +32,8 @@ def main():
                       startLab6,
                       startLab7,
                       startLab8,
-                      lambda er=errorCodes.LAB_NOT_FINED: error(er),
-                      lambda er=errorCodes.LAB_NOT_FINED: error(er),
+                      startLab9,
+                      startLab10,
                       lambda er=errorCodes.LAB_NOT_FINED: error(er),
                       lambda er=errorCodes.LAB_NOT_FINED: error(er)]
 
