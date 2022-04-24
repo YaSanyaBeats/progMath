@@ -1,6 +1,5 @@
 from tkinter import *
 from tkinter import filedialog
-import string
 from errors import errorCodes, error
 import math
 import numpy as np

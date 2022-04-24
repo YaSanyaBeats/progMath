@@ -87,7 +87,7 @@ class seventhLab():
         self.result_label.config(text="y = " + result)
 
         window = plt.subplots()
-        x = np.arange(self.X[0], self.X[-1], 0.1)
+        x = np.arange(self.X[0], self.X[-1], 1)
         y = []
         for i in range(len(x)):
             y.append(self.calculate_digit(x[i]))
